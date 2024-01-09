@@ -8,8 +8,9 @@ import org.springframework.data.redis.serializer.StringRedisSerializer
 
 @Configuration
 class RedisConfig {
+
     @Bean
-    fun redisTemplate(redisConnectionFactory: RedisConnectionFactory?): RedisTemplate<String, String> {
+    fun redisTemplate(redisConnectionFactory: RedisConnectionFactory): RedisTemplate<String, String> {
         val template = RedisTemplate<String, String>()
         template.connectionFactory = redisConnectionFactory
         template.setDefaultSerializer(StringRedisSerializer.UTF_8)

@@ -1,1 +1,10 @@
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
+redis-stream:
+  key: test-stream
+  group: default
+  pod-info-key-prefix: "TestConsumer"

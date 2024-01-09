@@ -1,4 +1,5 @@
 package net.kaptanucar.redisstreamstestbalancer.model
 
-class DummyEvent {
-}
+data class DummyEvent(
+        val message: String
+)
