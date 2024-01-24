@@ -18,6 +18,8 @@
     <properties>
         <java.version>17</java.version>
         <kotlin.version>1.9.21</kotlin.version>
+
+        <springmockk.version>4.0.2</springmockk.version>
     </properties>
 
     <dependencies>
@@ -51,6 +53,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ninja-squad</groupId>
+            <artifactId>springmockk</artifactId>
+            <version>${springmockk.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

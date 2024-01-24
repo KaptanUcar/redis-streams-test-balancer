@@ -16,6 +16,10 @@ class RedisStreamService(
         private val redisStreamProperties: RedisStreamProperties
 ) {
 
+    companion object {
+        const val MAX_PENDING_MESSAGE_COUNT = 10000L
+    }
+
     fun getAllConsumerNames(): List<String> = redisTemplate
             .opsForStream<Any, Any>()
             .consumers(redisStreamProperties.key, redisStreamProperties.group)
@@ -28,7 +32,7 @@ class RedisStreamService(
 
     fun getAllPendingMessages(): PendingMessages = redisTemplate
             .opsForStream<Any, Any>()
-            .pending(redisStreamProperties.key, redisStreamProperties.group, Range.unbounded<Any>(), 10000)
+            .pending(redisStreamProperties.key, redisStreamProperties.group, Range.unbounded<Any>(), MAX_PENDING_MESSAGE_COUNT)
 
     fun deleteConsumers(consumerNames: List<String>) = consumerNames
             .map { Consumer.from(redisStreamProperties.group, it) }
