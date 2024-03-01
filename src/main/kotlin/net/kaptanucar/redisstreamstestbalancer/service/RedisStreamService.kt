@@ -20,8 +20,9 @@ class RedisStreamService(
         const val MAX_PENDING_MESSAGE_COUNT = 10000L
     }
 
-    fun getAllConsumerNames(): List<String> = redisTemplate
-            .opsForStream<Any, Any>()
+    private val streamOps get() = redisTemplate.opsForStream<Any, Any>()
+
+    fun getAllConsumerNames(): List<String> = streamOps
             .consumers(redisStreamProperties.key, redisStreamProperties.group)
             .map { it.consumerName() }
             .toList()
@@ -30,8 +31,7 @@ class RedisStreamService(
             .keys("${redisStreamProperties.podInfoKeyPrefix}:*")
             .map { it.substringAfterLast(':') }
 
-    fun getAllPendingMessages(): PendingMessages = redisTemplate
-            .opsForStream<Any, Any>()
+    fun getAllPendingMessages(): PendingMessages = streamOps
             .pending(redisStreamProperties.key, redisStreamProperties.group, Range.unbounded<Any>(), MAX_PENDING_MESSAGE_COUNT)
 
     fun deleteConsumers(consumerNames: List<String>) = consumerNames
@@ -44,8 +44,7 @@ class RedisStreamService(
     fun reclaimMessage(
             recordId: RecordId,
             newConsumerName: String
-    ): List<MapRecord<String, Any, Any>> = redisTemplate
-            .opsForStream<Any, Any>()
+    ): List<MapRecord<String, Any, Any>> = streamOps
             .claim(
                     redisStreamProperties.key,
                     redisStreamProperties.group,
@@ -54,11 +53,9 @@ class RedisStreamService(
                     recordId
             )
 
-    fun addMessage(map: Map<Any, Any>) = redisTemplate
-            .opsForStream<Any, Any>()
+    fun addMessage(map: Map<Any, Any>) = streamOps
             .add(MapRecord.create(redisStreamProperties.key, map))
 
-    fun acknowledgeMessage(record: MapRecord<String, Any, Any>) = redisTemplate
-            .opsForStream<Any, Any>()
+    fun acknowledgeMessage(record: MapRecord<String, Any, Any>) = streamOps
             .acknowledge(redisStreamProperties.group, record)
 }
